@@ -7,6 +7,7 @@
 //
 
 #include "ofxTextLabelUL2.h"
+#include "ofxTextUtilsUL2.h"
 
 //--------------------------------------------------
 ofxTextLabelUL2::ofxTextLabelUL2()
@@ -37,23 +38,25 @@ void ofxTextLabelUL2::rebuild()
     if (_fbo.getWidth() != totalWidth || _fbo.getHeight() != totalHeight) {
         _fboSettings.width = totalWidth;
         _fboSettings.height = totalHeight;
+		_fboSettings.internalformat = GL_RGBA;
         _fbo.allocate(_fboSettings);
     }
     
     _fbo.begin();
     {
-        ofClear(0, 0);
+        ofClear(clearColor.r,clearColor.g,clearColor.b,0);
         
         ofPushStyle();
         
         ofSetColor(255);
+		ofEnableBlendMode(OF_BLENDMODE_ADD);
         if (_bDrawShapes) {
             font.drawStringAsShapes(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
         }
         else {
             font.drawString(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
         }
-        
+		ofDisableAlphaBlending();
         ofPopStyle();
     }
     _fbo.end();
@@ -85,6 +88,11 @@ void ofxTextLabelUL2::draw(float x, float y, float w, float h) const
     _fbo.draw(x, y, w, h);
 }
 
+void ofxTextLabelUL2::setText(const string& text)
+{
+    setText(ofStringUTF8ToWide(text));
+}
+
 //--------------------------------------------------
 void ofxTextLabelUL2::setText(const wstring& text)
 {
@@ -97,6 +105,11 @@ void ofxTextLabelUL2::appendText(const wstring& text)
 {
     _text.append(text);
     _bNeedsRebuild = true;
+}
+
+//--------------------------------------------------
+void ofxTextLabelUL2::appendText(const string& text){
+	appendText(ofStringUTF8ToWide(text));
 }
 
 //--------------------------------------------------

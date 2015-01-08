@@ -29,7 +29,10 @@ public:
     virtual float getWidth() const { return _fbo.getWidth(); }
     
     void setText(const wstring& text);
+	void setText(const string& text);
+
     void appendText(const wstring& text);
+    void appendText(const string& text);
     void clearText();
     const wstring& getText() const { return _text; }
     
@@ -53,6 +56,7 @@ public:
     
     ofxTrueTypeFontUL2 font;
     
+	ofColor clearColor;
 protected:
     wstring _text;
     int _align;
