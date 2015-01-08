@@ -20,5 +20,6 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
+    ofxTrueTypeFontUL2 textFont;
     ofxTextLabelUL2 textLabel;    
 };

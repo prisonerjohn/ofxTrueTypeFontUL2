@@ -12,28 +12,31 @@ void ofApp::setup()
     // Setup label font first.
     
 	// Load Latin face.
-	textLabel.font.loadFont(OF_TTF_SERIF, 64, true, true, 0.3f, 0, true);  // OF_TTF_SERIF has arabic faces.
+	textFont.loadFont(OF_TTF_SERIF, 64, true, true, 0.3f, 0, true);  // OF_TTF_SERIF has arabic faces.
 	
     // Load arabic face, UNICODE:0x0600-0x06FF
-//    textLabel.font.loadSubFont("Traditional Arabic", 1, -0.04, 0x0600, 0x06FF) ||  // Windows
-//    textLabel.font.loadSubFont("Geeza Pro", 1, -0.04, 0x0600, 0x06FF, "arab");  // OS X (Geeza need to set scriptTag)
+//    textFont.loadSubFont("Traditional Arabic", 1, -0.04, 0x0600, 0x06FF) ||  // Windows
+//    textFont.loadSubFont("Geeza Pro", 1, -0.04, 0x0600, 0x06FF, "arab");  // OS X (Geeza need to set scriptTag)
 
     // Set options.
-    textLabel.font.setLineHeight(textLabel.font.getFontSize() * 1.5);
-//    textLabel.font.setLetterSpacing(0.1);
-	textLabel.font.setTextDirection(UL2_TEXT_DIRECTION_RTL, UL2_TEXT_DIRECTION_TTB);
-    textLabel.font.setStrokeWidth(1.0f);
-//    textLabel.font.setAlignByPixel(true);
-//    textLabel.font.setWordWrap(true);
+    textFont.setLineHeight(textFont.getFontSize() * 1.5);
+//    textFont.setLetterSpacing(0.1);
+	textFont.setTextDirection(UL2_TEXT_DIRECTION_RTL, UL2_TEXT_DIRECTION_TTB);
+    textFont.setStrokeWidth(1.0f);
+//    textFont.setAlignByPixel(true);
+//    textFont.setWordWrap(true);
 
     // Enable OT feature tags.
     // http://partners.adobe.com/public/developer/opentype/index_tag3.html
-//    textLabel.font.addOTFeature("liga", 1);
+//    textFont.addOTFeature("liga", 1);
     
     // This makes proportional fonts, these are OpenType features tag by "palt" or "vpal".
     // For the faces not having kerning pairs, such as Japanese fonts.
-//    textLabel.font.useProportional(true);
-//    textLabel.font.useVrt2Layout(true);
+//    textFont.useProportional(true);
+//    textFont.useVrt2Layout(true);
+    
+    // Set the label font.
+    textLabel.setFont(&textFont);
     
     // Build the label.
     textLabel.setAlign(UL2_TEXT_ALIGN_V_TOP | UL2_TEXT_ALIGN_RIGHT);

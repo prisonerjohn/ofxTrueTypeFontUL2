@@ -11,7 +11,8 @@
 
 //--------------------------------------------------
 ofxTextLabelUL2::ofxTextLabelUL2()
-: _text(L"")
+: _font(NULL)
+, _text(L"")
 , _drawBounds(0, 0, 0, 0)
 , _bDrawShapes(false)
 , _align(UL2_TEXT_ALIGN_INVALID)
@@ -44,17 +45,17 @@ void ofxTextLabelUL2::rebuild()
     
     _fbo.begin();
     {
-        ofClear(clearColor.r,clearColor.g,clearColor.b,0);
+        ofClear(_clearColor.r, _clearColor.g, _clearColor.b, 0);
         
         ofPushStyle();
         
         ofSetColor(255);
 		ofEnableBlendMode(OF_BLENDMODE_ADD);
         if (_bDrawShapes) {
-            font.drawStringAsShapes(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
+            _font->drawStringAsShapes(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
         }
         else {
-            font.drawString(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
+            _font->drawString(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
         }
 		ofDisableAlphaBlending();
         ofPopStyle();
@@ -69,7 +70,7 @@ void ofxTextLabelUL2::rebuild()
 //--------------------------------------------------
 bool ofxTextLabelUL2::update()
 {
-    if (_bNeedsRebuild && font.isLoaded()) {
+    if (_bNeedsRebuild && _font) {
         rebuild();
         return true;
     }
@@ -88,6 +89,16 @@ void ofxTextLabelUL2::draw(float x, float y, float w, float h) const
     _fbo.draw(x, y, w, h);
 }
 
+//--------------------------------------------------
+void ofxTextLabelUL2::setFont(ofxTrueTypeFontUL2 *font)
+{
+    if (_font != font) {
+        _font = font;
+        _bNeedsRebuild = true;
+    }
+}
+
+//--------------------------------------------------
 void ofxTextLabelUL2::setText(const string& text)
 {
     setText(ofStringUTF8ToWide(text));
@@ -101,15 +112,16 @@ void ofxTextLabelUL2::setText(const wstring& text)
 }
 
 //--------------------------------------------------
+void ofxTextLabelUL2::appendText(const string& text)
+{
+    appendText(ofStringUTF8ToWide(text));
+}
+
+//--------------------------------------------------
 void ofxTextLabelUL2::appendText(const wstring& text)
 {
     _text.append(text);
     _bNeedsRebuild = true;
-}
-
-//--------------------------------------------------
-void ofxTextLabelUL2::appendText(const string& text){
-	appendText(ofStringUTF8ToWide(text));
 }
 
 //--------------------------------------------------
@@ -158,10 +170,19 @@ void ofxTextLabelUL2::setDrawBounds(const ofRectangle& drawBounds)
 }
 
 //--------------------------------------------------------------
+void ofxTextLabelUL2::setClearColor(const ofColor &clearColor)
+{
+    if (_clearColor != clearColor) {
+        _clearColor = clearColor;
+        _bNeedsRebuild = true;
+    }
+}
+
+//--------------------------------------------------------------
 const ofRectangle& ofxTextLabelUL2::getTotalBounds()
 {
-    if (!_bValidTotalBounds && font.isLoaded()) {
-        _totalBounds = font.getStringBoundingBox(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
+    if (!_bValidTotalBounds && _font) {
+        _totalBounds = _font->getStringBoundingBox(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
         _bValidTotalBounds = true;
     }
     
@@ -171,8 +192,8 @@ const ofRectangle& ofxTextLabelUL2::getTotalBounds()
 //--------------------------------------------------------------
 const vector<ofRectangle>& ofxTextLabelUL2::getGlyphBounds()
 {
-    if (!_bValidGlyphBounds && font.isLoaded()) {
-        _glyphBounds = font.getStringBoxes(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
+    if (!_bValidGlyphBounds && _font) {
+        _glyphBounds = _font->getStringBoxes(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
         _bValidGlyphBounds = true;
     }
     

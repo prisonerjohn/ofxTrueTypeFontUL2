@@ -28,11 +28,13 @@ public:
     virtual float getHeight() const { return _fbo.getHeight(); }
     virtual float getWidth() const { return _fbo.getWidth(); }
     
+    void setFont(ofxTrueTypeFontUL2 *font);
+    ofxTrueTypeFontUL2 * getFont() { return _font; }
+    
+    void setText(const string& text);
     void setText(const wstring& text);
-	void setText(const string& text);
-
-    void appendText(const wstring& text);
     void appendText(const string& text);
+    void appendText(const wstring& text);
     void clearText();
     const wstring& getText() const { return _text; }
     
@@ -48,21 +50,23 @@ public:
     void setDrawBounds(const ofRectangle& drawBounds);
     const ofRectangle& getDrawBounds() {  return _drawBounds; }
     
+    void setClearColor(const ofColor& clearColor);
+    const ofColor& getClearColor() { return _clearColor; }
+    
     void setNeedsRebuild() { _bNeedsRebuild = true; }
     bool getNeedsRebuild() const { return _bNeedsRebuild; }
     
     const ofRectangle& getTotalBounds();
     const vector<ofRectangle>& getGlyphBounds();
     
-    ofxTrueTypeFontUL2 font;
-    
-	ofColor clearColor;
 protected:
+    ofxTrueTypeFontUL2 *_font;
     wstring _text;
     int _align;
     bool _bDrawShapes;
     ofRectangle _drawBounds;
-    
+    ofColor _clearColor;
+
     ofFbo _fbo;
     ofFbo::Settings _fboSettings;
     bool _bNeedsRebuild;
