@@ -53,7 +53,13 @@ public:
     
 	ofRectangle getStringBoundingBox(wstring s, float x, float y,float width=0,float height=0,int textAlign=UL2_TEXT_ALIGN_INVALID);
 	ofRectangle getStringBoundingBox(string s, float x, float y,float width=0,float height=0,int textAlign=UL2_TEXT_ALIGN_INVALID);
-	
+
+	float stringWidth(wstring s);
+	float stringWidth(string s);
+
+	float stringHeight(wstring s);
+	float stringHeight(string s);
+
 	vector<ofRectangle> getStringBoxes(wstring s, float x, float y,float width=0,float height=0,int textAlign=UL2_TEXT_ALIGN_INVALID);
 	vector<ofRectangle> getStringBoxes(string s, float x, float y,float width=0,float height=0,int textAlign=UL2_TEXT_ALIGN_INVALID);
     

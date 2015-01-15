@@ -1896,6 +1896,22 @@ ofRectangle ofxTrueTypeFontUL2::getStringBoundingBox(string src, float x, float 
 	return getStringBoundingBox(ul2_ttf_utils::convToWString(src), x, y,width, height, textAlign);
 }
 
+//-----------------------------------------------------------
+float ofxTrueTypeFontUL2::stringWidth(wstring s){
+	return getStringBoundingBox(s, 0, 0).width;
+}
+float ofxTrueTypeFontUL2::stringWidth(string s){
+	return getStringBoundingBox(s, 0, 0).width;
+}
+
+//-----------------------------------------------------------
+float ofxTrueTypeFontUL2::stringHeight(wstring s){
+	return getStringBoundingBox(s, 0, 0).height;
+}
+float ofxTrueTypeFontUL2::stringHeight(string s){
+	return getStringBoundingBox(s, 0, 0).height;
+}
+
 
 //-----------------------------------------------------------
 vector<ofPath> ofxTrueTypeFontUL2::getStringAsPoints(wstring src,float x, float y,float width,float height,int textAlign) {
