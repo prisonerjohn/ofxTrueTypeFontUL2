@@ -44,7 +44,7 @@ public:
     void setDrawShapes(bool bDrawShapes);
     bool getDrawShapes() const { return _bDrawShapes; }
     
-    void setLineLength(float lineLength);
+    void setLineLength(float lineLength, float paddingX = 0, float paddingY = 0);
     float getLineLength() { return _drawBounds.width; }
     
     void setDrawBounds(const ofRectangle& drawBounds);

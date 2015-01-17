@@ -41,6 +41,9 @@ void ofApp::setup()
     // Build the label.
     textLabel.setAlign(UL2_TEXT_ALIGN_V_TOP | UL2_TEXT_ALIGN_RIGHT);
     textLabel.setDrawBounds(ofRectangle(kTextMargin, kTextMargin, ofGetWidth() - kTextMargin * 2, ofGetHeight() - kTextMargin * 2));
+
+    // You can also just set the length and the label will calculate its height automatically, with optional padding.
+//    textLabel.setLineLength(ofGetWidth() - kTextMargin * 2, kTextMargin, kTextMargin);
     
     // Load some text from a file.
     ofFile file("arabic-text.txt");

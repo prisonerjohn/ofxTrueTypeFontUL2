@@ -32,10 +32,15 @@ ofxTextLabelUL2::~ofxTextLabelUL2()
 //--------------------------------------------------
 void ofxTextLabelUL2::rebuild()
 {
+    // Calculate the height at the given width if necessary.
+    if (_drawBounds.height == 0) {
+        ofRectangle boundingBox = _font->getStringBoundingBox(_text, 0, 0, _drawBounds.width);
+        _drawBounds.height = boundingBox.height;
+    }
+
     // Reallocate the FBO if necessary.
     float totalWidth = _drawBounds.x * 2 + _drawBounds.width;
-    float totalHeight = _drawBounds.x * 2 + _drawBounds.width;
-    // EZ: We could test that the dims are greater or equal instead if this turns out to be slow.
+    float totalHeight = _drawBounds.y * 2 + _drawBounds.height;
     if (_fbo.getWidth() != totalWidth || _fbo.getHeight() != totalHeight) {
         _fboSettings.width = totalWidth;
         _fboSettings.height = totalHeight;
@@ -150,10 +155,10 @@ void ofxTextLabelUL2::setDrawShapes(bool bDrawShapes)
 }
 
 //--------------------------------------------------------------
-void ofxTextLabelUL2::setLineLength(float lineLength)
+void ofxTextLabelUL2::setLineLength(float lineLength, float paddingX, float paddingY)
 {
-    if (_drawBounds.width != lineLength) {
-        _drawBounds.width = lineLength;
+    if (_drawBounds.width != lineLength || _drawBounds.x != paddingX || _drawBounds.y != paddingY) {
+        _drawBounds.set(paddingX, paddingY, lineLength, 0);
         _bNeedsRebuild = true;
     }
 }
@@ -162,10 +167,8 @@ void ofxTextLabelUL2::setLineLength(float lineLength)
 void ofxTextLabelUL2::setDrawBounds(const ofRectangle& drawBounds)
 {
     if (_drawBounds != drawBounds) {
-        if (_drawBounds.width != drawBounds.width || _drawBounds.height != drawBounds.height) {
-            _bNeedsRebuild = true;
-        }
         _drawBounds = drawBounds;
+        _bNeedsRebuild = true;
     }
 }
 
