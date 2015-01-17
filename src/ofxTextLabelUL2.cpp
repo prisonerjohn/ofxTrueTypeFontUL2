@@ -157,10 +157,11 @@ void ofxTextLabelUL2::setDrawShapes(bool bDrawShapes)
 //--------------------------------------------------------------
 void ofxTextLabelUL2::setLineLength(float lineLength, float paddingX, float paddingY)
 {
-    //if (_drawBounds.width != lineLength || _drawBounds.x != paddingX || _drawBounds.y != paddingY) {
+    // Always rebuild because we can't tell if the height has changed or not.
+//    if (_drawBounds.width != lineLength || _drawBounds.x != paddingX || _drawBounds.y != paddingY) {
         _drawBounds.set(paddingX, paddingY, lineLength, 0);
         _bNeedsRebuild = true;
-    //}
+//    }
 }
 
 //--------------------------------------------------------------
