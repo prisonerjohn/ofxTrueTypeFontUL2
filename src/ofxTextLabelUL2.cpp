@@ -51,6 +51,7 @@ void ofxTextLabelUL2::rebuild()
     _fbo.begin();
     {
         ofClear(_clearColor.r, _clearColor.g, _clearColor.b, 0);
+        //ofClear(255,0,0, 255);
         
         ofPushStyle();
         
@@ -83,13 +84,21 @@ bool ofxTextLabelUL2::update()
 }
 
 //--------------------------------------------------
+#if OF_VERSION_MINOR > 8
 void ofxTextLabelUL2::draw(float x, float y) const
+#else
+void ofxTextLabelUL2::draw(float x, float y)
+#endif
 {
     _fbo.draw(x, y);
 }
 
 //--------------------------------------------------
+#if OF_VERSION_MINOR > 8
 void ofxTextLabelUL2::draw(float x, float y, float w, float h) const
+#else
+void ofxTextLabelUL2::draw(float x, float y, float w, float h)
+#endif
 {
     _fbo.draw(x, y, w, h);
 }

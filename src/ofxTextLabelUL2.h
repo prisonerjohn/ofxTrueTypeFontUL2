@@ -22,12 +22,20 @@ public:
     virtual void rebuild();
     virtual bool update();
     
+#if OF_VERSION_MINOR > 8
     virtual void draw(float x, float y) const;
     virtual void draw(float x, float y, float w, float h) const;
-    
     virtual float getHeight() const { return _fbo.getHeight(); }
     virtual float getWidth() const { return _fbo.getWidth(); }
+#else
+    virtual void draw(float x, float y);
+    virtual void draw(float x, float y, float w, float h);
+    virtual float getHeight() { return _fbo.getHeight(); }
+    virtual float getWidth() { return _fbo.getWidth(); }
+#endif
+
     
+
     void setFont(ofxTrueTypeFontUL2 *font);
     ofxTrueTypeFontUL2 * getFont() { return _font; }
     
@@ -56,6 +64,8 @@ public:
     void setNeedsRebuild() { _bNeedsRebuild = true; }
     bool getNeedsRebuild() const { return _bNeedsRebuild; }
     
+	ofFbo& getFbo(){ return _fbo; }
+
     const ofRectangle& getTotalBounds();
     const vector<ofRectangle>& getGlyphBounds();
     
