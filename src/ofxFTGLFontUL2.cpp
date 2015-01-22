@@ -30,7 +30,6 @@ ofRectangle ofxFTGLFontUL2::getStringBoundingBox(string s, float x, float y, flo
 void ofxFTGLFontUL2::drawString(wstring s, float x, float y, float width, float height, int textAlign)
 {
     if (loaded) {
-        cout << width << endl;
         if (width > 0) {
             setLineLength(width);
         }
