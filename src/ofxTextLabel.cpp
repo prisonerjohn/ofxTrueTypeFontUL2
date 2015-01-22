@@ -1,21 +1,22 @@
 //
-//  ofxTextLabelUL2.cpp
-//  emptyExample
+//  ofxTextLabel.cpp
+//
 //
 //  Created by Elias Zananiri on 2015-01-05.
 //
 //
 
-#include "ofxTextLabelUL2.h"
+#include "ofxTextLabel.h"
 #include "ofxTextUtilsUL2.h"
 
 //--------------------------------------------------
-ofxTextLabelUL2::ofxTextLabelUL2()
+template<typename T>
+ofxTextLabel_<T>::ofxTextLabel_()
 : _font(NULL)
 , _text(L"")
 , _drawBounds(0, 0, 0, 0)
 , _bDrawShapes(false)
-, _align(UL2_TEXT_ALIGN_INVALID)
+, _align(0)  // UL2_TEXT_ALIGN_INVALID
 , _bNeedsRebuild(false)
 , _bValidTotalBounds(false)
 , _bValidGlyphBounds(false)
@@ -24,20 +25,22 @@ ofxTextLabelUL2::ofxTextLabelUL2()
 }
 
 //--------------------------------------------------
-ofxTextLabelUL2::~ofxTextLabelUL2()
+template<typename T>
+ofxTextLabel_<T>::~ofxTextLabel_()
 {
-
+    
 }
 
 //--------------------------------------------------
-void ofxTextLabelUL2::rebuild()
+template<typename T>
+void ofxTextLabel_<T>::rebuild()
 {
     // Calculate the height at the given width if necessary.
     if (_drawBounds.height == 0) {
         ofRectangle boundingBox = _font->getStringBoundingBox(_text, 0, 0, _drawBounds.width);
         _drawBounds.height = boundingBox.height;
     }
-
+    
     // Reallocate the FBO if necessary.
     float totalWidth = _drawBounds.x * 2 + _drawBounds.width;
     float totalHeight = _drawBounds.y * 2 + _drawBounds.height;
@@ -51,7 +54,6 @@ void ofxTextLabelUL2::rebuild()
     _fbo.begin();
     {
         ofClear(_clearColor.r, _clearColor.g, _clearColor.b, 0);
-        //ofClear(255,0,0, 255);
         
         ofPushStyle();
         
@@ -74,7 +76,8 @@ void ofxTextLabelUL2::rebuild()
 }
 
 //--------------------------------------------------
-bool ofxTextLabelUL2::update()
+template<typename T>
+bool ofxTextLabel_<T>::update()
 {
     if (_bNeedsRebuild && _font) {
         rebuild();
@@ -84,27 +87,30 @@ bool ofxTextLabelUL2::update()
 }
 
 //--------------------------------------------------
+template<typename T>
 #if OF_VERSION_MINOR > 8
-void ofxTextLabelUL2::draw(float x, float y) const
+void ofxTextLabel_<T>::draw(float x, float y) const
 #else
-void ofxTextLabelUL2::draw(float x, float y)
+void ofxTextLabel_<T>::draw(float x, float y)
 #endif
 {
     _fbo.draw(x, y);
 }
 
 //--------------------------------------------------
+template<typename T>
 #if OF_VERSION_MINOR > 8
-void ofxTextLabelUL2::draw(float x, float y, float w, float h) const
+void ofxTextLabel_<T>::draw(float x, float y, float w, float h) const
 #else
-void ofxTextLabelUL2::draw(float x, float y, float w, float h)
+void ofxTextLabel_<T>::draw(float x, float y, float w, float h)
 #endif
 {
     _fbo.draw(x, y, w, h);
 }
 
 //--------------------------------------------------
-void ofxTextLabelUL2::setFont(ofxTrueTypeFontUL2 *font)
+template<typename T>
+void ofxTextLabel_<T>::setFont(T *font)
 {
     if (_font != font) {
         _font = font;
@@ -113,40 +119,46 @@ void ofxTextLabelUL2::setFont(ofxTrueTypeFontUL2 *font)
 }
 
 //--------------------------------------------------
-void ofxTextLabelUL2::setText(const string& text)
+template<typename T>
+void ofxTextLabel_<T>::setText(const string& text)
 {
     setText(ofStringUTF8ToWide(text));
 }
 
 //--------------------------------------------------
-void ofxTextLabelUL2::setText(const wstring& text)
+template<typename T>
+void ofxTextLabel_<T>::setText(const wstring& text)
 {
     _text = text;
     _bNeedsRebuild = true;
 }
 
 //--------------------------------------------------
-void ofxTextLabelUL2::appendText(const string& text)
+template<typename T>
+void ofxTextLabel_<T>::appendText(const string& text)
 {
     appendText(ofStringUTF8ToWide(text));
 }
 
 //--------------------------------------------------
-void ofxTextLabelUL2::appendText(const wstring& text)
+template<typename T>
+void ofxTextLabel_<T>::appendText(const wstring& text)
 {
     _text.append(text);
     _bNeedsRebuild = true;
 }
 
 //--------------------------------------------------
-void ofxTextLabelUL2::clearText()
+template<typename T>
+void ofxTextLabel_<T>::clearText()
 {
     _text = L"";
     _bNeedsRebuild = true;
 }
 
 //--------------------------------------------------
-void ofxTextLabelUL2::setAlign(int align)
+template<typename T>
+void ofxTextLabel_<T>::setAlign(int align)
 {
     if (_align != align) {
         _align = align;
@@ -155,7 +167,8 @@ void ofxTextLabelUL2::setAlign(int align)
 }
 
 //--------------------------------------------------
-void ofxTextLabelUL2::setDrawShapes(bool bDrawShapes)
+template<typename T>
+void ofxTextLabel_<T>::setDrawShapes(bool bDrawShapes)
 {
     if (_bDrawShapes != bDrawShapes) {
         _bDrawShapes = bDrawShapes;
@@ -164,17 +177,19 @@ void ofxTextLabelUL2::setDrawShapes(bool bDrawShapes)
 }
 
 //--------------------------------------------------------------
-void ofxTextLabelUL2::setLineLength(float lineLength, float paddingX, float paddingY)
+template<typename T>
+void ofxTextLabel_<T>::setLineLength(float lineLength, float paddingX, float paddingY)
 {
     // Always rebuild because we can't tell if the height has changed or not.
-//    if (_drawBounds.width != lineLength || _drawBounds.x != paddingX || _drawBounds.y != paddingY) {
-        _drawBounds.set(paddingX, paddingY, lineLength, 0);
-        _bNeedsRebuild = true;
-//    }
+    //    if (_drawBounds.width != lineLength || _drawBounds.x != paddingX || _drawBounds.y != paddingY) {
+    _drawBounds.set(paddingX, paddingY, lineLength, 0);
+    _bNeedsRebuild = true;
+    //    }
 }
 
 //--------------------------------------------------------------
-void ofxTextLabelUL2::setDrawBounds(const ofRectangle& drawBounds)
+template<typename T>
+void ofxTextLabel_<T>::setDrawBounds(const ofRectangle& drawBounds)
 {
     if (_drawBounds != drawBounds) {
         _drawBounds = drawBounds;
@@ -183,7 +198,8 @@ void ofxTextLabelUL2::setDrawBounds(const ofRectangle& drawBounds)
 }
 
 //--------------------------------------------------------------
-void ofxTextLabelUL2::setClearColor(const ofColor &clearColor)
+template<typename T>
+void ofxTextLabel_<T>::setClearColor(const ofColor &clearColor)
 {
     if (_clearColor != clearColor) {
         _clearColor = clearColor;
@@ -192,7 +208,8 @@ void ofxTextLabelUL2::setClearColor(const ofColor &clearColor)
 }
 
 //--------------------------------------------------------------
-const ofRectangle& ofxTextLabelUL2::getTotalBounds()
+template<typename T>
+const ofRectangle& ofxTextLabel_<T>::getTotalBounds()
 {
     if (!_bValidTotalBounds && _font) {
         _totalBounds = _font->getStringBoundingBox(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
@@ -203,7 +220,8 @@ const ofRectangle& ofxTextLabelUL2::getTotalBounds()
 }
 
 //--------------------------------------------------------------
-const vector<ofRectangle>& ofxTextLabelUL2::getGlyphBounds()
+template<typename T>
+const vector<ofRectangle>& ofxTextLabel_<T>::getGlyphBounds()
 {
     if (!_bValidGlyphBounds && _font) {
         _glyphBounds = _font->getStringBoxes(_text, _drawBounds.x, _drawBounds.y, _drawBounds.width, _drawBounds.height, _align);
