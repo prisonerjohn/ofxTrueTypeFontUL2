@@ -9,7 +9,7 @@
 #include "ofxFTGLFontUL2.h"
 
 //--------------------------------------------------
-ofRectangle ofxFTGLFontUL2::getStringBoundingBox(wstring s, float x, float y, float width)
+ofRectangle ofxFTGLFontUL2::getStringBoundingBox(wstring s, float x, float y, float width, float height, int textAlign)
 {
     if (loaded && width > 0) {
         setLineLength(width);
@@ -18,7 +18,7 @@ ofRectangle ofxFTGLFontUL2::getStringBoundingBox(wstring s, float x, float y, fl
 }
 
 //--------------------------------------------------
-ofRectangle ofxFTGLFontUL2::getStringBoundingBox(string s, float x, float y, float width)
+ofRectangle ofxFTGLFontUL2::getStringBoundingBox(string s, float x, float y, float width, float height, int textAlign)
 {
     if (loaded && width > 0) {
         setLineLength(width);
@@ -63,4 +63,16 @@ void ofxFTGLFontUL2::drawStringAsShapes(wstring s, float x, float y, float width
 void ofxFTGLFontUL2::drawStringAsShapes(string s, float x, float y, float width, float height, int textAlign)
 {
     drawString(s, x, y, width, height, textAlign);
+}
+
+//--------------------------------------------------
+void ofxFTGLFontUL2::setLineHeight(float height)
+{
+    setLineSpacing(height / getSize());
+}
+
+//--------------------------------------------------
+float ofxFTGLFontUL2::getLineHeight()
+{
+    return getLineSpacing() * getSize();
 }
